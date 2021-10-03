@@ -9,6 +9,7 @@ This hardening guide will cover the following aspects in Raspberry-Pi installati
 * SSH hardening
 * Auto-update settings
 * Firewall (iptables) hardening
+* Checking log files
 
 And I will continue to add/modify this guide in due course as I become aware about the new security setting(s).
 
@@ -297,6 +298,17 @@ If everything works, your changes will be applied and you can check them with th
 ```
 $ sudo /sbin/iptables -L
 ```
+### Check your logs regularly
+
+Most of the attacks are visible in the log files. So, it's good to inspect them regularly.
+Please check the following log files for the signs of suspicious activity:
+
+* /var/log/syslog - Main log file for all services
+* /var/log/message - System log file
+* /var/log/auth.log - Authentication attempts are logged here.
+* /var/log/mail.log - Traces of email logs
+* Plus you can also watch other important services logs like apache (/var/log/apache2/error.log) and mysql(/var/log/mysql/error.log)
+
 
 #### References: 
 * https://www.raspberrypi.org/documentation/computers/configuration.html#using-key-based-authentication
