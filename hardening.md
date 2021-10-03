@@ -234,6 +234,69 @@ Save the file and restart ssh daemon.
 $ sudo service ssh reload
 $ sudo service ssh restart
 ```
+### Firewall (iptables) hardening
+
+Once you’ve locked down SSH, make sure that the iptables firewall is running on your Pi. Also, it's recommended to log the message whenever a firewall rule is activated and a connection is blocked.
+
+* Install iptables
+```
+$ sudo apt-get install iptables iptables-persistent
+```
+Note that using the iptables firewall will require new kernel modules to be loaded. The easiest way to load them is to reboot your Pi. 
+
+* List current firewall rules
+```
+$ sudo /sbin/iptables -L
+```
+
+* Save the firewall rules
+You can save the rules to a text file and edit it using the command:
+```
+$ sudo /sbin/iptables-save > /etc/iptables/rules.v4
+```
+
+* Typical firewall rules look like this. You have to modify it to suit your configuration:
+```
+$ sudo cat /etc/iptables/rules.v4
+ :INPUT ACCEPT [0:0]
+ :FORWARD ACCEPT [0:0]
+ :OUTPUT ACCEPT [0:0]
+
+# Allows all loopback (lo0) traffic and drop all traffic to 127/8 that doesn't use lo0
+ -A INPUT -i lo -j ACCEPT
+ -A INPUT ! -i lo -d 127.0.0.0/8 -j REJECT
+
+# Accepts all established inbound connections
+ -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# Allows all outbound traffic
+ # You could modify this to only allow certain traffic
+ -A OUTPUT -j ACCEPT
+
+# Allows SSH connections
+ # The --dport number is the same as in /etc/ssh/sshd_config
+ -A INPUT -p tcp -m state --state NEW --dport 22 -j ACCEPT
+
+# log iptables denied calls (access via 'dmesg' command)
+ -A INPUT -m limit --limit 5/min -j LOG --log-prefix "iptables denied: " --log-level 7
+
+# Reject all other inbound - default deny unless explicitly allowed policy:
+ -A INPUT -j REJECT
+ -A FORWARD -j REJECT
+
+COMMIT
+```
+
+Make sure that iptables are working properly. This can be tricky because you might be remotely connected via SSH, and if you’ve messed something up you don’t want your connection to be severed. 
+
+There is a command that will help you by applying rules and asking for confirmation that you can still connect. If you don’t respond in a certain amount of time the program will assume you’ve gotten disconnected and it will roll back your changes. If you do respond, it will apply your changes permanently. To accomplish this use the command:
+```
+$ sudo /usr/sbin/iptables-apply /etc/iptables/rules.v4
+```
+If everything works, your changes will be applied and you can check them with the command:
+```
+$ sudo /sbin/iptables -L
+```
 
 #### References: 
 * https://www.raspberrypi.org/documentation/computers/configuration.html#using-key-based-authentication
