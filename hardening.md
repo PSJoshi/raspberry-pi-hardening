@@ -1,5 +1,5 @@
 ## Hardening Raspberry-Pi
-The security of your Raspberry Pi is important. Raspberry Pi has been used in many applications - right from honeypots to smart homes and any gaps in its security will leave your Raspberry Pi open to hackers who can then use it without your permission.
+The security of your Raspberry Pi is important. Raspberry Pi has been used in many applications - right from honeypots to smart homes and any gaps in its security will leave your Raspberry Pi open to malicious users who can then use it without your permission.
 
 So, it's important to harden the Raspberry Pi installation and keep it secure.
 
