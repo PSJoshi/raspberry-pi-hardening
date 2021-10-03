@@ -43,6 +43,10 @@ $ sudo su - <user>
 ``` $ sudo su root ```
 * Deactive password for user "pi": 
 ``` $ sudo passwd --lock pi ```
+* Delete the pi user if you wish.
+```
+$ sudo deluser -remove-home pi
+```
 * Make sudo require password:
 ``` $ sudo visudo /etc/sudoers.d/010_pi-nopasswd ``` 
 and change/add pi user entry as well as other <user> entry who have superuser rights:
@@ -308,6 +312,118 @@ Please check the following log files for the signs of suspicious activity:
 * /var/log/auth.log - Authentication attempts are logged here.
 * /var/log/mail.log - Traces of email logs
 * Plus you can also watch other important services logs like apache (/var/log/apache2/error.log) and mysql(/var/log/mysql/error.log)
+
+### Physical access protections
+If your Raspberry Pi is accessbile physically to malicious user, make him/her hard to see the data.
+* Auto logoff after X minutes
+* Set Password for 'Grub' boot
+* Encrypt data on SD card
+
+### Block brute force attempts using Fail2ban
+Fail2ban tool offers protection against brute-force attacks and automatically blocks the offending IPs. It saves you having to manually check log files for intrusion attempts and then update the firewall (via iptables) to prevent them.
+* Install package
+```
+$ sudo apt install fail2ban
+```
+By default, it will ban attacker 10 minutes after 5 failures. You can also set your policies - configure number of tries before a ban, ban duration etc.
+Main configuration file under /etc/fail2ban folder. Its mainly /etc/fail2ban/jail.conf
+```
+$ sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+$ sudo nano /etc/fail2ban/jail.local
+```
+Add/modify the following section to the jail.local file. 
+```
+[ssh]
+enabled  = true
+port     = ssh
+filter   = sshd
+logpath  = /var/log/auth.log
+maxretry = 6
+```
+The above configuration examines the ssh port, filters using the sshd parameters, parses the /var/log/auth.log for malicious activity, and allows six retries before the detection threshold is reached. Checking the default section, we can see that the default banning action
+```
+ Default banning action (e.g. iptables, iptables-new,
+# iptables-multiport, shorewall, etc) It is used to define
+# action_* variables. Can be overridden globally or per
+# section within jail.local file
+banaction = iptables-multiport
+```
+iptables-multiport means that the Fail2ban system will run the /etc/fail2ban/action.d/iptables-multiport.conf file when the detection threshold is reached. There are a number of different action configuration files that can be used. Multiport bans all access on all ports.
+If you want to permanently ban an IP address after three failed attempts, you can change the maxretry value in the [ssh] section, and set the bantime to a negative number:
+```
+[ssh]
+enabled  = true
+port     = ssh
+filter   = sshd
+logpath  = /var/log/auth.log
+maxretry = 3
+bantime = -1
+```
+
+* Restart the service after you made the changes
+```
+$ sudo service fail2ban restart
+```
+### Stop un-necessary services
+Take a review of all the services running on the device. If a particular service is not required, it's better to turn it off. By doing this, you are automatically reducing the attack surface of the device.
+* To stop service
+```
+$ sudo service <service-name> stop
+```
+If the service starts automatically on boot, use
+```
+$ sudo update-rc.d <service-name> remove
+```
+* To uninstall the service
+```
+$ sudo apt remove <service-name>
+```
+
+### Do not allow autologins and empty passwords
+Make sure that nobody uses empty passwords for accessing Raspberry Pi.
+* Search /etc/shadow file for empty passwords.
+```
+$ sudo awk -F: '($2 =="") {print} /etc/shadown
+```
+* lock unsafe accounts
+```
+$ passwd -l <user>
+```
+* Disable autologin feature
+```
+$ sudo sed -i 's/^greeter-hide-users=true/greeter-hide-users=false/g' /etc/lightdm/lightdm.conf
+$ sudo sed -i 's/^\#greeter-allow-guest=true/greeter-allow-guest=false/g' /etc/lightdm/lightdm.conf
+$ sudo sed -i 's/^\#greeter-show-manual-login=false/greeter-show-manual-login=true/g' /etc/lightdm/lightdm.conf
+$ sudo sed -i 's/^\#allow-guest=true/allow-guest=false/g' /etc/lightdm/lightdm.conf
+$ sudo sed -i 's/^\#allow-guest=true/allow-guest=false/g' /etc/lightdm/lightdm.conf
+$ sudo sed -i 's/^\#autologin-user-timeout=0/autologin-user-timeout=10/g' /etc/lightdm/lightdm.conf
+# also comment out default login from 'pi'
+$ sudo sed -i 's/^autologin-user=pi/\#autologin-user=pi/g' /etc/lightdm/lightdm.conf
+```
+### Unattended Upgrade
+* Install unattended-upgrades package from the repository.
+```
+$ sudo apt install unattended-upgrades
+```
+Customize the configuration file /etc/apt/apt.conf.d/50unattended-upgrades as per your preferences.
+
+Next do the following configuration changes in "periodic upgrade" file - /etc/apt/apt.conf.d/02periodic
+```
+APT::Periodic::Enable "1";
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Download-Upgradeable-Packages "1";
+APT::Periodic::Unattended-Upgrade "1";
+APT::Periodic::AutocleanInterval "1";
+APT::Periodic::Verbose "2";
+```  
+If the file is empty, add the above lines. If not, modify the settings as per your preferences.
+
+The above setting will enable automatic update every day.
+
+You can debug the configuration with the command:
+```
+$ sudo unattended-upgrades -d
+```
 
 
 #### References: 
