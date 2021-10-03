@@ -16,13 +16,22 @@ And I will continue to add/modify this guide in due course as I become aware abo
 Pi comes with a default user and default password. The world knows about it. So, it's better to turn it off completely and create your own.
 * Change password for user "pi": passwd (or during installation)
 * Create new user and set password: 
-```sudo adduser < user > ```
+```sudo adduser <user> ```
 You will be prompted to set the password for <user> and the new user will have home directory at /home/<user>
 
 * Set admin and/or sudo rights to new user:
 ``` 
  $ sudo usermod -a -G adm,dialout,cdrom,sudo,audio,video,plugdev,games,users,input,netdev,gpio,i2c,spi <user>
 ```
+Alternatively, you can also do:
+ ```
+ $ sudo /usr/sbin/useradd --groups sudo -m <user>
+ ```
+This will create a new account, create a directory for the account (such as /home/<user>), and add the new account to the sudo group so the user can use the sudo command. Once the new user account is created, it's required to set a password for the account.
+ ```
+ $ sudo passwd <user>
+ ```
+ 
 Check if sudo permissions are in place
 ```
 $ sudo su - <user>
@@ -41,6 +50,10 @@ and change/add pi user entry as well as other <user> entry who have superuser ri
     <user> ALL=(ALL) PASSWD: ALL
 ```
 Save the file. It will be checked for any syntax errors. If no errors are detected, the file will be saved and a shell prompt will be returned.
+* Reset the root password and set it to something hard to guess!
+  ```
+     $ sudo passwd root
+   ```
 
 Refer to security section on Raspberry Pi site: https://github.com/raspberrypi/documentation/blob/develop/documentation/asciidoc/computers/configuration/securing-the-raspberry-pi.adoc
 
@@ -134,6 +147,28 @@ And restart SSH service.
 ```
 $ sudo service ssh restart
 ```
+* Typical, hardened sshd configuration looks like this:
+ ```
+ # Authentication:
+ LoginGraceTime 120
+ PermitRootLogin no
+ StrictModes yes
+
+ RSAAuthentication yes
+ PubkeyAuthentication yes
+ AuthorizedKeysFile %h/.ssh/authorized_keys
+
+# To enable empty passwords, change to yes (NOT RECOMMENDED)
+ PermitEmptyPasswords no
+
+# Change to yes to enable challenge-response passwords (beware issues with
+ # some PAM modules and threads)
+ ChallengeResponseAuthentication no
+ # Change to no to disable tunnelled clear text passwords
+ PasswordAuthentication no
+
+UsePAM no
+  ```
 * Go with key-based authentication instead of password whereever possible.
 Key pairs cryptographically secure keys - One private, and the other one public. They can be used to authenticate a client to an SSH server (in this case the Raspberry Pi).
      
@@ -145,6 +180,14 @@ By default, the key will be 2048 bits long: breaking the encryption on a key of 
 You will be prompted for a passphrase during key generation - extra level of security measure and you can leave this blank.
 
 The steps to generate key based authentication are elaborated below:
+
+* Make sure to create .ssh folder with appropriate permissions:
+```
+ $ mkdir ~/.ssh
+ $ chmod 0700 ~/.ssh
+ $ touch ~/.ssh/authorized_keys
+ $ chmod 0600 ~/.ssh/authorized_keys
+```
 * To generate new SSH keys enter the following command:
 ```
 $ ssh-keygen
@@ -154,7 +197,7 @@ Upon entering this command, you will be asked where to save the key. It is sugge
 ```
 $ ls ~/.ssh
 ```
-You should see the files id_rsa and id_rsa.pub
+You should see the files id_rsa and id_rsa.pub.
 * Copy public key(id_rsa.pub) to Raspberry Pi.
 ```
 $ ssh-copy-id <user>@<ip-address>
