@@ -74,6 +74,33 @@ If you are not using PulseAudio for anything other than Bluetooth audio, remove 
 ```
 $ sudo apt -y purge "pulseaudio*"
 ```
+* Its better to update Raspberry Pi OS as a part of cron job. The process for this is described below:
+
+Create a file((bash script) ``` auto-update.sh ``` under /home/<user> and add the following
+
+```
+#!/bin/bash
+sudo apt-get update -y
+sudo apt-get dist-upgrade -y
+sudo apt-get autoremove -y
+sudo apt-get autoclean -y
+sudo apt install openssh-server -y
+sudo reboot
+```
+Make a log folder and add executable permission to the above script
+```
+$ mkdir -p log
+$ sudo chmod +x auto-update.sh
+```
+Now, create cron job entry using a terminal and set the job to run for daily execution.
+```
+$ sudo crontab -e
+```
+Add the following line:
+```
+0 0 * * * /home/< user >/< file >.sh > /home/<user>/log/auto-update-cron.log 2>&1
+```
+
 ### SSH hardening
 SSH based access is the common way of accessing a Raspberry Pi device remotely. By default, logging with SSH requires you to enter a username/password and this password should be strong enough to avoid dictionary based attacks or its variants.
 
