@@ -59,7 +59,26 @@ Save the file. It will be checked for any syntax errors. If no errors are detect
   ```
      $ sudo passwd root
    ```
+* Create a new user for regular use and maintenance
 
+Create a new user for regular use. The default “pi” user should only be used for upgrades or major changes.
+
+To add a new user:
+```
+sudo adduser <user>
+```
+
+You will then be prompted to add a password for the new user and then hit enter.
+The new user will have a home directory of /home/<user>/.
+
+You need to give privileges to the new user to carry out routine tasks on Raspberry Pi. So, do this:
+```
+sudo usermod -a -G adm,dialout,cdrom,sudo,audio,video,plugdev,games,users,input,netdev,gpio,i2c,spi <user>
+```
+And check if it's working as expected:
+```
+sudo su - <user>
+```
 Refer to security section on Raspberry Pi site: https://github.com/raspberrypi/documentation/blob/develop/documentation/asciidoc/computers/configuration/securing-the-raspberry-pi.adoc
 
 ### Disabling un-used Interfaces
@@ -431,3 +450,5 @@ $ sudo unattended-upgrades -d
 * https://www.raspberrypi.org/documentation/computers/remote-access.html#copy-your-public-key-to-your-raspberry-pi
 
 Overall, please follow the detailed instructions at https://www.raspberrypi.org/documentation/computers/configuration.html#improving-ssh-security
+### Interesting links:
+* How to prepare Raspberry Pi for first time - https://reelyactive.github.io/diy/pi-prep/
