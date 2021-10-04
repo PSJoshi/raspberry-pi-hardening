@@ -670,6 +670,21 @@ References:
  
 Overall, please follow the detailed instructions at https://www.raspberrypi.org/documentation/computers/configuration.html#improving-ssh-security
 
+### Operational commands
+* List all running services
+```
+$ sudo service --status-all
+```
+* Automatically start service on boot
+```
+$ sudo update-rc.d ssh defaults
+```
+* Remove service from automatic start
+```
+$ sudo update-rc.d -f ssh remove
+```
+
+ 
 ### Interesting links:
 * How to prepare Raspberry Pi for first time - https://reelyactive.github.io/diy/pi-prep/
 * Readonly Raspberry Pi (Arch linux) - https://gist.github.com/fmarcia/f96df1a3afadb51637b0
