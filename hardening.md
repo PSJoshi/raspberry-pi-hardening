@@ -594,7 +594,82 @@ The default niceness should generally be 0, but you can set individual users and
 *           soft    priority   0           # Set the default priority to neutral niceness.
 ```
 
+### Bash shell hardening
+* In /etc/profile, defind HISTTIMEFORMAT variable
+```
+export HISTTIMEFORMAT="%d/%m/%y %T "
+```
+* Make bash_history append only
+```
+$ sudo chattr +a /home/<user>/.bash_history
+```
+
+* Harden bash history related environment variables by adding the following lines
+to .bashrc of each user (/home/<user>/.bashrc)
+
+```
+shopt -s histappend 
+readonly PROMPT_COMMAND="history -a" 
+readonly HISTFILE 
+readonly HISTFILESIZE 
+readonly HISTSIZE 
+readonly HISTCMD 
+readonly HISTCONTROL 
+readonly HISTIGNORE
+```
+Further, change the owner of all bash related files to root and give user(s) only read access.
+```
+$ sudo chown root /home/$USER/.bash_history 
+$ sudo chown root /home/$USER/.bash_profile 
+$ sudo chown root /home/$USER/.bash_login
+$ sudo chown root /home/$USER/.profile
+$ sudo chown root /home/$USER/.bash_logout
+$ sudo chown root /home/$USER/.bashrc
+
+$ sudo chmod o+rwt     /home/$USER/.bash_history 
+$ sudo chmod o+rt,a+x  /home/$USER/.bash_profile 
+$ sudo chmod o+rt,a+x  /home/$USER/.bash_login
+$ sudo chmod o+rt,a+x  /home/$USER/.profile
+$ sudo chmod o+rwt,a+x /home/$USER/.bash_logout
+$ sudo chmod o+rwt,a+x /home/$USER/.bashrc
+
+$ sudo chattr +a /home/$USER/.bash_history 
+$ sudo chattr +a /home/$USER/.bash_logout
+$ sudo chattr +a /home/$USER/.bashrc
+```
+
+You can also make use of this nice bash hardening script. Kindly tune it to your preferences: 
+```
+echo ">>> Starting"
+echo ">>> Loading configuration into /etc/bash.bashrc"
+
+echo "HISTTIMEFORMAT='%F %T '" >> /etc/bash.bashrc
+echo 'HISTFILESIZE=-1' >> /etc/bash.bashrc
+echo 'HISTSIZE=-1' >> /etc/bash.bashrc
+echo 'HISTCONTROL=ignoredups' >> /etc/bash.bashrc
+
+# Custom history configuration
+echo '# Configure BASH to append (rather than overwrite the history):' >> /etc/bash.bashrc
+echo 'shopt -s histappend' >> /etc/bash.bashrc
+
+echo '# Attempt to save all lines of a multiple-line command in the same entry' >> /etc/bash.bashrc
+echo 'shopt -s cmdhist' >> /etc/bash.bashrc
+
+echo '# After each command, append to the history file and reread it' >> /etc/bash.bashrc
+# echo 'export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$"\n"}history -a; history -c; history -r"' >> /etc/bash.bashrc
+echo 'export PROMPT_COMMAND="history -a"'>> /etc/bash.bashrc
+# Reload BASH for settings to take effect
+echo ">>> Reloading BASH"
+exec "$BASH"
+
+echo ">>> Finished. Exiting."
+```
+References:
+* https://www.thomaslaurenson.com/blog/2018-07-02/better-bash-history/
+* Shell history file for each user - https://unixhealthcheck.com/blog?id=251
+ 
 Overall, please follow the detailed instructions at https://www.raspberrypi.org/documentation/computers/configuration.html#improving-ssh-security
 
 ### Interesting links:
 * How to prepare Raspberry Pi for first time - https://reelyactive.github.io/diy/pi-prep/
+* Readonly Raspberry Pi (Arch linux) - https://gist.github.com/fmarcia/f96df1a3afadb51637b0
