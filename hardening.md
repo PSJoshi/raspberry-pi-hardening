@@ -258,6 +258,10 @@ Save the file and restart ssh daemon.
 $ sudo service ssh reload
 $ sudo service ssh restart
 ```
+#### References: 
+* https://www.raspberrypi.org/documentation/computers/configuration.html#using-key-based-authentication
+* https://www.raspberrypi.org/documentation/computers/remote-access.html#copy-your-public-key-to-your-raspberry-pi
+     
 ### Firewall (iptables) hardening
 
 Once you’ve locked down SSH, make sure that the iptables firewall is running on your Pi. Also, it's recommended to log the message whenever a firewall rule is activated and a connection is blocked.
@@ -443,12 +447,154 @@ You can debug the configuration with the command:
 ```
 $ sudo unattended-upgrades -d
 ```
+### Sysctl.conf Hardening
+"/etc/sysctl.conf" file is used to configure kernel parameters at runtime. Linux reads and applies settings from this file.
 
+The following settings available in /etc/sysctl.conf will help you to improve security:
 
-#### References: 
-* https://www.raspberrypi.org/documentation/computers/configuration.html#using-key-based-authentication
-* https://www.raspberrypi.org/documentation/computers/remote-access.html#copy-your-public-key-to-your-raspberry-pi
+* Limit network-transmitted configuration for IPv4
+* Limit network-transmitted configuration for IPv6
+* Turn on execshield protection
+* Prevent against the common 'syn flood attack'
+* Turn on source IP address verification
+* Prevents a cracker from using a spoofing attack against the IP address of the server.
+* Logs several types of suspicious packets, such as spoofed packets, source-routed packets, and redirects.
+
+```
+$ sudo nano /etc/sysctl.conf
+
+# IP Spoofing protection
+net.ipv4.conf.default.rp_filter = 1
+net.ipv4.conf.all.rp_filter = 1
+# Block SYN attacks
+net.ipv4.tcp_syncookies = 1
+# Controls IP packet forwarding
+net.ipv4.ip_forward = 0
+# Ignore ICMP redirects
+net.ipv4.conf.all.accept_redirects = 0
+net.ipv6.conf.all.accept_redirects = 0
+net.ipv4.conf.default.accept_redirects = 0
+net.ipv6.conf.default.accept_redirects = 0
+# Ignore send redirects
+net.ipv4.conf.all.send_redirects = 0
+net.ipv4.conf.default.send_redirects = 0
+# Disable source packet routing
+net.ipv4.conf.all.accept_source_route = 0
+net.ipv6.conf.all.accept_source_route = 0
+net.ipv4.conf.default.accept_source_route = 0
+net.ipv6.conf.default.accept_source_route = 0
+# Log Martians
+net.ipv4.conf.all.log_martians = 1
+# Block SYN attacks
+net.ipv4.tcp_max_syn_backlog = 2048
+net.ipv4.tcp_synack_retries = 2
+net.ipv4.tcp_syn_retries = 5
+# Log Martians
+net.ipv4.icmp_ignore_bogus_error_responses = 1
+# Ignore ICMP broadcast requests
+net.ipv4.icmp_echo_ignore_broadcasts = 1
+# Ignore Directed pings
+net.ipv4.icmp_echo_ignore_all = 1
+kernel.exec-shield = 1
+kernel.randomize_va_space = 1
+# disable IPv6 if not required
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+# Accept Redirects? No, this is not router
+net.ipv4.conf.all.secure_redirects = 0
+# Log packets with impossible addresses to kernel log? yes
+net.ipv4.conf.default.secure_redirects = 0
+# [IPv6] Number of Router Solicitations to send until assuming no routers are present.
+# This is host and not router.
+net.ipv6.conf.default.router_solicitations = 0
+# Accept Router Preference in RA?
+net.ipv6.conf.default.accept_ra_rtr_pref = 0
+# Learn prefix information in router advertisement.
+net.ipv6.conf.default.accept_ra_pinfo = 0
+# Setting controls whether the system will accept Hop Limit settings from a router advertisement.
+net.ipv6.conf.default.accept_ra_defrtr = 0
+# Router advertisements can cause the system to assign a global unicast address to an interface.
+net.ipv6.conf.default.autoconf = 0
+# How many neighbor solicitations to send out per address?
+net.ipv6.conf.default.dad_transmits = 0
+# How many global unicast IPv6 addresses can be assigned to each interface?
+net.ipv6.conf.default.max_addresses = 1
+
+# In rare occasions, it may be beneficial to reboot your server reboot if it runs out of memory.
+# This simple solution can avoid you hours of down time. The vm.panic_on_oom=1 line enables panic
+# on OOM; the kernel.panic=10 line tells the kernel to reboot ten seconds after panicking.
+vm.panic_on_oom = 1
+kernel.panic = 10
+
+# Apply new settings
+sudo sysctl -p
+```
+
+### Set hostname 
+The hostname uniquely identifies your computer on the local network. The hostname can be use in many services or applications. Once the hostname is set, it is not recommended to change it.
+```
+$ sudo nano /etc/hostname
+<ip/hostname>
+
+$ sudo nano /etc/hosts
+127.0.0.1	localhost localhost.localdomain <ip/hostname>
+
+```
+### Set Locale and Timezone
+* set language
+```
+sudo locale-gen en_GB.UTF-8
+sudo update-locale LANG=en_GB.UTF-8
+sudo dpkg-reconfigure tzdata
+```
+* Display and set the current system’s time and timezone
+
+```
+# display current settings
+$ timedatectl
+
+# display time zones
+$ timedatectl list-timezones
+
+# set timezone
+$ sudo timedatectl set-timezone your_time_zone
+```
+### Setting security limits
+
+```/etc/security/limits.conf``` allows setting resource limits for users logged in via PAM. These settings are useful to protect your system against fork bomb attacks, resource exhaustion etc.
+* core
+Corefiles are useful for debugging, but annoying when normally using your system. You should have a soft limit of 0 and a hard limit of unlimited, and then temporarily raise your limit for the current shell with ulimit -c unlimited when you need corefiles for debugging.
+```
+*           soft    core       0           # Prevent corefiles from being generated by default.
+*           hard    core       unlimited   # Allow corefiles to be temporarily enabled. 
+```
+* nice
+You should disallow everyone except for root from having processes of minimal niceness (-20), so that root can fix an unresponsive system.
+```
+*           hard    nice       -19         # Prevent non-root users from running a process at minimal niceness.
+root        hard    nice       -20         # Allows root to run a process at minimal niceness to fix the system when unresponsive.
+```
+* nofile
+This limits the number of file descriptors any process owned by the specified domain can have open at any one time. You may need to increase this value to something as high as 8192 for certain applications to work. Some database applications like MongoDB or Apache Kafka recommend setting nofile to 64000 or 128000.
+```
+*           hard    nofile     8192   # Raise this value in case you are running ElasticSearch/Kafka/MongoDB
+```
+* nproc
+Having an nproc limit is important, as this will limit how many times a fork-bomb can replicate. However, having it too low can make your system unstable or even unusable, as new processes will not be able to be created.
+
+A value of 300 is too low for even the most minimal of Window-managers to run more than a few desktop applications and daemons, but is often fine for an X-less server!
+```
+*           hard    nproc      2048        # Prevent fork-bombs from taking out the system.
+```
+Note that this value of 2048 is just an example, and you may need to set yours higher. On the flipside, you also may be able to do with it being lower.
+* priority
+The default niceness should generally be 0, but you can set individual users and groups to have different default priorities using this parameter.
+```
+*           soft    priority   0           # Set the default priority to neutral niceness.
+```
 
 Overall, please follow the detailed instructions at https://www.raspberrypi.org/documentation/computers/configuration.html#improving-ssh-security
+
 ### Interesting links:
 * How to prepare Raspberry Pi for first time - https://reelyactive.github.io/diy/pi-prep/
