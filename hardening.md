@@ -688,3 +688,4 @@ $ sudo update-rc.d -f ssh remove
 ### Interesting links:
 * How to prepare Raspberry Pi for first time - https://reelyactive.github.io/diy/pi-prep/
 * Readonly Raspberry Pi (Arch linux) - https://gist.github.com/fmarcia/f96df1a3afadb51637b0
+* Emulate Raspberry Pi with Qemu - https://azeria-labs.com/emulate-raspberry-pi-with-qemu/
