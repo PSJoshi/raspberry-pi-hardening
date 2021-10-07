@@ -112,6 +112,12 @@ iptables -A INPUT -i eth0 -p tcp --sport X -m state --state ESTABLISHED -j ACCEP
 iptables -A OUTPUT -o eth0 -p tcp -m multiport --dports X,Y,Z -m state --state NEW,ESTABLISHED -j ACCEPT
 iptables -A INPUT -i eth0 -p tcp -m multiport --sports X,Y,Z -m state --state ESTABLISHED -j ACCEPT
 ```
+* Reset firewall rules - firewall-reset.sh
+```
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+```
 
 Resources:
 * IPTables Essentials: Common Firewall Rules and COmmands https://www.digitalocean.com/community/tutorials/iptables-essentials-common-firewall-rules-and-commands
