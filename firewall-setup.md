@@ -118,6 +118,83 @@ iptables -P INPUT ACCEPT
 iptables -P FORWARD ACCEPT
 iptables -P OUTPUT ACCEPT
 ```
+* Sample firewall rules
+```
+# Drop all rules
+/sbin/iptables -F
+/sbin/iptables -X
+
+# Allow local connections
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+
+# Drop packets that have an invalid tracking state.
+
+iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
+
+# Allow ping requests
+iptables -A INPUT -i eth0 -p icmp --icmp-type echo-request -j ACCEPT
+iptables -A OUTPUT -o eth0 -p icmp --icmp-type echo-reply -j ACCEPT
+
+# Allow incoming SSH, HTTP, HTTPS
+iptables -A INPUT -i eth0 -p tcp -m multiport --dports 22,80,443 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -o eth0 -p tcp -m multiport --sports 22,80,443 -m state --state ESTABLISHED -j ACCEPT
+
+# Allow outgoing SSH, HTTP, HTTPS proxy connections
+iptables -A OUTPUT -o eth0 -p tcp -m multiport --dports 22,80,443 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp -m multiport --sports 22,80,443 -m state --state ESTABLISHED -j ACCEPT
+
+# Allow outgoing DNS connections (TCP & UDP)
+iptables -A OUTPUT -o eth0 -p tcp --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --sport 53 -m state --state ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -o eth0 -p udp --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -i eth0 -p udp --sport 53 -m state --state ESTABLISHED -j ACCEPT
+
+# Allow incoming FTP connections
+iptables -A INPUT -i eth0 -p tcp --sport 21 -m state --state ESTABLISHED -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --sport 20 -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --sport 1023: --dport 1023: -m state --state ESTABLISHED -j ACCEPT
+
+# Allow outgoing FTP connections
+iptables -A OUTPUT -o eth0 -p tcp --dport 21 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -o eth0 -p tcp --dport 20 -m state --state ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -o eth0 -p tcp --sport 1023: --dport 1023: -m state --state ESTABLISHED,RELATED,NEW -j ACCEPT
+
+# Allow outgoing SMTP connections 
+iptables -A OUTPUT -o eth0 -p tcp -m multiport --dports 25,587 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp -m multiport --sports 25,587 -m state --state ESTABLISHED -j ACCEPT
+
+# Allow incoming mail connections 
+iptables -A INPUT -i eth0 -p tcp -m multiport --dports 25,587,993 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -o eth0 -p tcp -m multiport --sports 25,587,993 -m state --state ESTABLISHED -j ACCEPT
+
+# Prevent DoS attacks
+iptables -A INPUT -p tcp --dport 80 -m limit --limit 25/minute --limit-burst 100 -j ACCEPT
+
+# Drop all other connections
+iptables -P INPUT DROP
+iptables -P FORWARD DROP
+iptables -P OUTPUT DROP
+```
+
+Save an Restore firewall rules
+```
+# cat <<EOF > /etc/network/if-pre-up.d/iptables
+#!/bin/sh
+/sbin/iptables-restore < /etc/iptables.up.rules
+/sbin/ip6tables-restore < /etc/ip6tables.up.rules
+EOF
+
+# chmod +x /etc/network/if-pre-up.d/iptables
+
+# cat <<EOF > /etc/network/if-post-down.d/iptables
+#!/bin/sh
+/sbin/iptables-save > /etc/iptables.up.rules
+/sbin/ip6tables-save > /etc/ip6tables.up.rules
+EOF
+
+# chmod +x /etc/network/if-post-down.d/iptables
+```
 
 Resources:
 * IPTables Essentials: Common Firewall Rules and COmmands https://www.digitalocean.com/community/tutorials/iptables-essentials-common-firewall-rules-and-commands
