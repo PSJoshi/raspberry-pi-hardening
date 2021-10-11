@@ -17,7 +17,7 @@ $ timedatectl list-timezones|grep asia -i|grep -i kol
 $ timedatectl set-timezone Asia/Kolkata
 ```
 * Disable time synchronization
-Since our client will sync time with NTP server, disable timesyncd service on the client
+Since our client will sync time with NTP server, disable timesyncd service on the client and setup your own ntp server and client.
 ```
 $ sudo timedatectl set-ntp false
 ```
@@ -39,3 +39,4 @@ Comment out last line and replace default server by your own server.
 #### Ref: 
 * https://raspberrytips.com/time-sync-raspberry-pi/
 * https://rishabhdevyadav.medium.com/how-to-install-ntp-server-and-client-s-on-ubuntu-18-04-lts-f0562e41d0e1
+* http://raspberrypi.tomasgreno.cz/ntp-client-and-server.html
