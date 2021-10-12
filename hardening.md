@@ -683,7 +683,59 @@ $ sudo update-rc.d ssh defaults
 ```
 $ sudo update-rc.d -f ssh remove
 ```
+### Disable unwanted services
 
+```
+# update-rc.d <Servicename> disable
+```
+### Disable bluetooth
+In most cases, the bluetooth service is not required
+```
+# systemctl disable bluetooth
+# systemctl stop bluetooth
+```
+### Disable avahi
+Since Pi is going to use simple uni-cast DNS, multi-cast DNS support is not required.
+```
+# systemctl disable avahi-daemon
+# systemctl stop avahi-daemon
+```
+### Disable TriggerHappy
+Since Pi is not being used with button, disable the TriggerHappy daemon.
+```
+# systemctl disable triggerhappy
+# systemctl stop triggerhappy 
+```
+
+### Check the status of services at startup
+```
+# sudo service --status-all
+```
+### List all the services
+```
+# sudo systemctl list-unit-files --type=service
+```
+```
+# systemctl list-units --all --type=service --no-pager
+```
+* running services
+```
+# systemctl list-units --all --type=service --no-pager | grep running
+```
+* all stopped/dead services
+```
+# systemctl list-units --all --type=service --no-pager | grep dead
+```
+* List enabled services
+```
+# systemctl list-unit-files | grep enabled
+```
+* Enable/disable a service -e.g. apache
+```
+# sudo systemctl enable apache2
+# sudo systemctl disable apache2
+```
+ 
  
 ### Interesting links:
 * How to prepare Raspberry Pi for first time - https://reelyactive.github.io/diy/pi-prep/
