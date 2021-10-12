@@ -683,8 +683,22 @@ $ sudo update-rc.d ssh defaults
 ```
 $ sudo update-rc.d -f ssh remove
 ```
-### Disable unwanted services
 
+#### Disable loading wireless drivers
+Disable loading the drivers for bluetooth and WiFi. Apart from improved security, it will also reduce power usage.
+```
+# cat > /etc/modprobe.d/raspi-blacklist.conf <<EOF
+
+# WiFi
+blacklist brcmfmac
+blacklist brcmutil
+
+# Bluetooth
+blacklist btbcm
+blacklist hci_uart
+EOF
+```
+### Disable unwanted services
 ```
 # update-rc.d <Servicename> disable
 ```
