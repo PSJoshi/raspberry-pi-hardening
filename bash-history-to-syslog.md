@@ -1,4 +1,5 @@
 ### Send bash history logs of all the users to syslog
+Add the following to the file - /etc/profile
 ```
 #log all your bash commands to syslog
 function log2syslog
