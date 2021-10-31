@@ -21,8 +21,8 @@ It keeps track of user actions and permits you to see how long users have been c
 
 ### Some useful commands
 * user accounting summary (sa command)
-
- This command summarizes accounting information from previously executed commands, software I/O operation times, and CPU times, as recorded in the accounting record file ```/var/account/pacct```
+ This command summarizes accounting information from previously executed commands, software I/O operation times, and CPU times, as recorded in the accounting record file ```/var/account/pacct```.
+ Some commonly used commands are given below:
   * highest percentage of users
     ``` $ sa -c ```
   * total number of user processes and their CPU time
@@ -31,8 +31,8 @@ It keeps track of user actions and permits you to see how long users have been c
     ``` $ sa -u ```
 
 * user connection statistics (ac command)
-
-    ```ac``` prints out statistics about users' connection times in hours based on the logins and logouts in the current /var/log/wtmp file. ac is also capable of printing out time totals for each day (−d option), and for each user (−p option).
+```ac``` prints out statistics about users' connection times in hours based on the logins and logouts in the current /var/log/wtmp file. ac is also capable of printing out time totals for each day (−d option), and for each user (−p option).
+ Some commonly used commands are given below:
    * hour based connection times
       ``` $ ac ```
    * Daily log in hour-based time
@@ -41,8 +41,8 @@ It keeps track of user actions and permits you to see how long users have been c
       ``` $ ac -p ```
    * log-in time statistics of particular user
         ``` $ ac <user> ```
-        ```
-          # day wise statistics
+        ``` 
+          for display of day wise statistics
           $ ac -d <user>
         ```
 * tracking historical commands (lastcomm command)
