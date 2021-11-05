@@ -50,3 +50,4 @@ Sometimes, the following settings are also applied:
                 invoke-rc.d <daemon-name> reload >/dev/null 2>&1
         endscript
 ```
+* Also, take care of journal activity size. Please refer to this link for more details - https://dev.to/brisbanewebdeveloper/amend-journal-has-been-rotated-since-unit-was-started-on-x1-extreme-gen-2-x1e2-5eme
