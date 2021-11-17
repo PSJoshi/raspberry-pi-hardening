@@ -18,11 +18,11 @@
 ```
 # systemctl status cups.service
 ```
-### Disable service at boot
+### Disable service at boot e.g. unbound
 ```
-$ sudo systemctl stop unbound
-$ sudo systemctl status unbound
-$ sudo systemctl disable unbound
+$ sudo systemctl stop <service-name>
+$ sudo systemctl status <service-name>
+$ sudo systemctl disable <service-name>
 $ sudo systemctl status unbound
 ```
 ### service automatically started at boot time
