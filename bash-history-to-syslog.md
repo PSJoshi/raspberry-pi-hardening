@@ -10,6 +10,13 @@ function log2syslog
 }
 trap log2syslog DEBUG
 ```
+To check if the commands are seen in the syslog, you can do this:
+```
+# source /etc/profile
+# whoami
+# tail -f /var/log/messages
+```
+You should see the command ```whoami``` trace in the /var/log/message directory.
 
 ### References:
 * https://blog.rootshell.be/2009/02/28/bash-history-to-syslog/
