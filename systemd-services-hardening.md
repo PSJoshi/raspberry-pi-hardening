@@ -56,4 +56,4 @@ You have to repeat this procedure carefully for all the systemd services.
 * https://gist.github.com/ageis/f5595e59b1cddb1513d1b425a323db04
 * https://www.linode.com/docs/guides/introduction-to-systemctl/
 * http://0pointer.de/blog/projects/security.html
-
+* https://info.tail-f.com/hubfs/Whitepapers/Tail-f%20Securing%20and%20Sandboxing%20ConfD_Rev%20B_2020-11-17.pdf
