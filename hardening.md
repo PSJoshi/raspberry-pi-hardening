@@ -754,7 +754,7 @@ For Debian and Ubuntu systems no script is needed for finding compiler informati
 ```
 # dpkg -l | egrep -i "compil"
 ```
-Remove permissions for "world" for the compilers found
+Remove permissions for the other users for the compilers found
 ```
 $ sudo chmod o-rx /usr/bin/lua5.1
 $ sudo chmod o-rx /usr/bin/gcc
@@ -774,3 +774,8 @@ DIR_MODE=0750
 * How to prepare Raspberry Pi for first time - https://reelyactive.github.io/diy/pi-prep/
 * Readonly Raspberry Pi (Arch linux) - https://gist.github.com/fmarcia/f96df1a3afadb51637b0
 * Emulate Raspberry Pi with Qemu - https://azeria-labs.com/emulate-raspberry-pi-with-qemu/
+ 
+### Verify debian packages using debsums
+* https://sleeplessbeastie.eu/2015/03/02/how-to-verify-installed-packages/
+* https://gist.github.com/bitwombat/efb9ce8ada50b92fd0582e8533de9de7
+
