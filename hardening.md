@@ -749,7 +749,26 @@ Since Pi is not being used with button, disable the TriggerHappy daemon.
 # sudo systemctl enable apache2
 # sudo systemctl disable apache2
 ```
- 
+### Hardening compiler permissions
+For Debian and Ubuntu systems no script is needed for finding compiler information. Simply use the dpkg command to query the correct information, and grep it.
+```
+# dpkg -l | egrep -i "compil"
+```
+Remove permissions for "world" for the compilers found
+```
+$ sudo chmod o-rx /usr/bin/lua5.1
+$ sudo chmod o-rx /usr/bin/gcc
+```
+### Default permission for home directory
+In most cases, default permissions for /home directory are set as 755. It can be made more restrictive like 750.
+```
+$ sudo chmod -R 0759 /home/<user>
+```
+In fact, you can add new users with default 0759 permission by modifying /etc/adduser.conf
+Just change the line - DIR_MODE=0755 to DIR_MODE=0750
+```
+DIR_MODE=0750
+``` 
  
 ### Interesting links:
 * How to prepare Raspberry Pi for first time - https://reelyactive.github.io/diy/pi-prep/
