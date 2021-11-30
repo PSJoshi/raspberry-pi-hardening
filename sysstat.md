@@ -18,7 +18,8 @@ So, it's always useful to have these stats collected at periodic intervals to ga
 $ sudo apt-get -y install sysstat 
 ```
 * Configure sysstat
-By default. Sysstat monitoring is disabled. To enable the sysstat monitoring, edit the configuration file - ```/etc/default/sysstat``` in text editor and save it:
+
+By default. Sysstat monitoring is disabled. So, edit the configuration file ```/etc/default/sysstat``` and enable monitoring:
 ```
 $ sudo nano /etc/default/sysstat
 ```
@@ -26,7 +27,8 @@ Set "Enabled" option to True for enabling monitoring.
 ```
 ENABLED="true"
 ```
-Also, modify options for system statistics collection under /etc/sysstat/sysstat
+Further, the debian package, by default, only logs "Disk" statistics when you run system statistics daemon. To collect all the statistics, you need to modift the file ```/etc/sysstat/sysstat```
+Default:
 ```
 $ sudo cat /etc/sysstat/sysstat|grep -v ^#|grep -v ^$
 HISTORY=7
@@ -46,14 +48,13 @@ SA_DIR=/var/log/sysstat
 ZIP="xz"
 UMASK=0022
 ```
-Now, enable the sysstat service and start it by executing:
+Now, enable sysstat service and start it by executing:
 ```
 $ sudo systemctl enable sysstat
 $ sudo systemctl start sysstat
 ```
 
-
-* Create sysstat cron file - /etc/cron.d/sysstat and set to a 1 minute interval
+* Create sysstat cron file - /etc/cron.d/sysstat and set to run under 10 minute interval
 ```
 # Run system activity accounting tool every 10 minutes
 */10 * * * * root /usr/lib64/sa/sa1 60 10
