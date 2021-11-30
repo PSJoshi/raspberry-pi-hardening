@@ -141,4 +141,9 @@ Use the -s and -e options to designate start and end times. The times entered mu
 ```
 $ sar -f /var/log/sysstat/sa30 -dp -s 04:00:00 -e 05:00:00
 ```
-    
+### Interesting links
+* Amazon EC2 performance monitoring - https://aws.amazon.com/premiumsupport/knowledge-center/ec2-linux-monitor-performance-with-sar/
+* Sysstat email report - https://github.com/desbma/sysstat_mail_report
+* System statistics examples - https://www.linuxtechi.com/generate-cpu-memory-io-report-sar-command/
+* https://tecadmin.net/how-to-install-sysstat-on-ubuntu-20-04/
+* https://sleeplessbeastie.eu/2019/07/03/how-to-collect-system-activity-information/    
