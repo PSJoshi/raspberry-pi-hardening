@@ -1,4 +1,4 @@
-### Tracking system activities using systat
+### Tracking system activities using sysstat package
 SYSSTAT is a software application comprised of several tools that offers advanced system performance monitoring. It provides the ability to create a measurable baseline of server performance, as well as the capability to formulate, accurately assess and conclude what led up to an issue or unexpected occurrence. In short, it lets you peel back layers of the system to see how it‚Äôs doing… in a way it is the blinking light telling you what is going on, except it blinks to a file. SYSSTAT has broad coverage of performance statistics and will watch the following server elements:
 * Input/Output and transfer rate statistics (global, per device, per partition, per network filesystem and per Linux task / PID)
 * CPU statistics (global, per CPU and per Linux task / PID), including support for virtualization architectures
