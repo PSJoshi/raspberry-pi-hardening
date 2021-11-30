@@ -141,6 +141,10 @@ Use the -s and -e options to designate start and end times. The times entered mu
 ```
 $ sar -f /var/log/sysstat/sa30 -dp -s 04:00:00 -e 05:00:00
 ```
+If you want to routinely get yesterday's file and can never remember the date and have GNU date you could try
+```
+$ sar -f /var/log/sysstat/sa$(date +%d -d yesterday) -A
+```
 ### Interesting links
 * Amazon EC2 performance monitoring - https://aws.amazon.com/premiumsupport/knowledge-center/ec2-linux-monitor-performance-with-sar/
 * Sysstat email report - https://github.com/desbma/sysstat_mail_report
