@@ -51,6 +51,18 @@ UMask=0077
 ```
 You have to repeat this procedure carefully for all the systemd services.
 
+#### Some useful systemd commands
+
+| command | description |
+| -------- | ---------- |
+| systemctl list-dependencies | show unit's dependencies |
+| systemctl list-sockets | list sockets |
+| systemctl list-jobs | view active systemd jobs |
+| systemctl list-unit-files | see unit files |
+| systemctl list-units | show loaded units |
+| systemctl get-default | list default target |
+
+
 ### References
 * https://www.freedesktop.org/software/systemd/man/systemd.exec.html#CapabilityBoundingSet=
 * https://gist.github.com/ageis/f5595e59b1cddb1513d1b425a323db04
