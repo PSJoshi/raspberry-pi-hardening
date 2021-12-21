@@ -35,7 +35,8 @@ After the ntp package has been removed, it is time to enable NTP support in time
 Start by choosing the NTP server pool nearest to you and include it in /etc/systemd/timesyncd.conf. 
 ```
 [Time]
-NTP=time.cloudflare.com
+#NTP=time.cloudflare.com
+NTP=time.google.com
 ```
 before restarting the daemon:
 ```
