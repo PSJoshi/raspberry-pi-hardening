@@ -4,9 +4,13 @@ Sometimes, you need to boot raspberry pi in single user mode as you did somethin
 This allows you to get to a root shell by adding init=/bin/bash to /boot/cmdline.txt file. Further, sometimes file systems also gets corrupted. It is better to do fsck checks on the file systems.
 
 File - /boot/cmdline.txt
+You need to take out SD card and put it in another system. Once the disk is mounted, you need to append the following text to the existing line under /boot/cmdline.txt
 ```
 fsck.repair=yes rootwait rw init=/bin/bash
 ```
+and Reboot the original system again.
+
+You can also do the same thing using NOOBS.
 
 First you must hold the "Shift" key on Raspberry boot to get into NOOBS recovery section of the Raspberry
 then you should add the following command at the end of the "cmdline.txt" :
