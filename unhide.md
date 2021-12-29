@@ -22,12 +22,12 @@ or
 An excellent technique for sniffing out rootkits involves verification of all ps threads. Reverse scanning verifies that each of the processor threads that ps images exhibit valid system calls and can be looked up in the procfs listing.
 
 ```
-unhide quick reverse
+# unhide quick reverse
 ```
 
 #### Standard test
 ```
-unhide sys proc
+# unhide sys proc
 ```
 #### Deeper test
 ```
