@@ -51,6 +51,66 @@ UMask=0077
 ```
 You have to repeat this procedure carefully for all the systemd services.
 
+Some examples of hardened systemd configurations:
+### service - acct
+```
+# cat /etc/systemd/system/acct.service.d/override.conf
+[Service]
+SystemCallFilter=@system-service
+SystemCallArchitectures=native
+PrivateTmp=yes
+NoNewPrivileges=true
+PrivateDevices=true
+ProtectKernelModules=yes
+ProtectControlGroups=true
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectSystem=strict
+#RestrictSUIDSGID=true
+RestrictNamespaces=yes
+#DevicePolicy=strict
+```
+### service - auditd
+```
+# cat /etc/systemd/system/auditd.service.d/override.conf
+[Service]
+PrivateTmp=yes
+NoNewPrivileges=true
+PrivateDevices=true
+ProtectKernelModules=yes
+ProtectControlGroups=true
+ProtectHome=true
+ProtectKernelTunables=true
+#ProtectSystem=strict
+RestrictSUIDSGID=true
+RestrictNamespaces=yes
+DevicePolicy=strict
+SystemCallFilter=@system-service
+SystemCallArchitectures=native
+DeviceAllow=/dev/null rw
+#MemoryDenyWriteExecute=yes
+```
+### service - dbus
+```
+# cat /etc/systemd/system/dbus.service.d/override.conf
+Requires=dbus.socket
+[Service]
+PrivateTmp=yes
+NoNewPrivileges=true
+PrivateDevices=true
+ProtectKernelModules=yes
+ProtectControlGroups=true
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectSystem=strict
+RestrictNamespaces=yes
+#DevicePolicy=strict
+DeviceAllow=/dev/null rw
+SystemCallFilter=@system-service
+SystemCallArchitectures=native
+DeviceAllow=/dev/null rw
+MemoryDenyWriteExecute=yes
+```
 #### Some useful systemd commands
 
 | command | description |
