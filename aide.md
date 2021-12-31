@@ -188,6 +188,22 @@ Copy the database in place;
 # cp /home/joshi/aide.db{.new,}
 ```
 
+### Sending AIDE Report via Mail
+By default, AIDE sets up itself a daily execution script, ```/etc/cron.daily/aide```, upon installation. The the output of checks is mailed to the user specified in the MAILTO= directive of the ```/etc/default/aide``` configuration file as detailed above.
+
+To sent the AIDE report via mail, you need to edit the file, ```/etc/default/aide``` and set the value of MAILTO directive to your email ID. The default recipient is root.
+
+Most of the AIDE default parameter settings are defined in this file. It is highly commended for easy understanding, therefore go through this file to see what other options to enable or disable.
+
+If you wanted to just quickly test AIDE to ensure it picks up your changes, but won’t commit them to baseline, you can perform a one-time scan by:
+```
+# aide.wrapper
+```
+
+To receive nightly AIDE reports, no further configuration is needed since Ubuntu/Debian already setup a cron job that will run AIDE automatically in /etc/cron.daily/aide. This will run whenever your system normally runs the cron.daily jobs, which is defined in /etc/crontab.
+
+Please remember that utilizing a tool to provide file integrity monitoring is only one part of a defense in depth strategy. There is no silver bullet for system security, but every layer you add will increase your security footprint which helps you with taking a proactive approach to security.
+
 #### References
 * https://kifarunix.com/install-and-configure-aide-on-debian-10/
 * https://www.hackerxone.com/2021/09/23/step-by-step-to-install-aide-on-ubuntu-20-04-lts/
