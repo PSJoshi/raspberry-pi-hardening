@@ -1,11 +1,11 @@
 ### Disable root account
 For security reasons, it is safe to disable the root account. Removing the account might not be a good idea at first, instead we simply need to disable it.
 
-# To disable the root account, simply use the -l option.
+To disable the root account, simply use the -l option.
 ```
 $ sudo passwd -l root
 ```
-# If for some valid reason you need to re-enable the account, simply use the -u option.
+If for some valid reason you need to re-enable the account, simply use the -u option.
 ```
 $ sudo passwd -u root
 ```
