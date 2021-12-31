@@ -43,8 +43,7 @@ This will last until the server reboots. Let's create the entry in the fstab.
 $ sudo nano /etc/fstab
 : /swapfile	none	swap	sw	0 0
 ```
-* Swappiness in the file should be set to 0. Skipping this step may cause both poor performance,
-# whereas setting it to 0 will cause swap to act as an emergency buffer, preventing out-of-memory crashes.
+* Swappiness in the file should be set to 0. Skipping this step may cause both poor performance. Setting it to 0 will cause swap to act as an emergency buffer, preventing out-of-memory crashes.
 ```
 $ echo 0 | sudo tee /proc/sys/vm/swappiness
 $ echo vm.swappiness = 0 | sudo tee -a /etc/sysctl.conf
