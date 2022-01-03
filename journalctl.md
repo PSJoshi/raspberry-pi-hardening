@@ -50,7 +50,7 @@ To find all messages related to a particular user, use the UID for that user.
 ```
 $ id mysql
 ```
-# This returns a line like this.
+This returns a line like this.
 ```
 uid=108(mysql) gid=116(mysql) groups=116(mysql)
 ```
