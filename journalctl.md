@@ -54,7 +54,7 @@ This returns a line like this.
 ```
 uid=108(mysql) gid=116(mysql) groups=116(mysql)
 ```
-And then we are querying the journal for all messages logged by that user.
+And then we can query the journal for all messages logged by that user.
 ```
 # journalctl _UID=108
 ```
