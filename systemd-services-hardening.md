@@ -129,3 +129,9 @@ MemoryDenyWriteExecute=yes
 * https://www.linode.com/docs/guides/introduction-to-systemctl/
 * http://0pointer.de/blog/projects/security.html
 * https://info.tail-f.com/hubfs/Whitepapers/Tail-f%20Securing%20and%20Sandboxing%20ConfD_Rev%20B_2020-11-17.pdf
+* Documentation of systemd - https://www.freedesktop.org/software/systemd/man/systemd.exec.html#
+* Practical commands related to systemd - https://www.fosslinux.com/48088/reasons-systemd-practical-tool-sysadmins.htm
+* Systemd services strengthening - https://www.linuxjournal.com/content/systemd-service-strengthening
+* Understanding systemd features to secure services - https://www.redhat.com/sysadmin/systemd-secure-services
+* Mastering systemd - https://www.redhat.com/sysadmin/mastering-systemd
+
