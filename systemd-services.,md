@@ -1,0 +1,6 @@
+* Systemd service examples - https://medium.com/the-code-vault/systemd-simple-service-examples-ce586afeed27
+* https://codybonney.com/change-default-timeouts-starting-stopping-systemd-units/
+* https://sleeplessbeastie.eu/2020/02/29/how-to-prevent-systemd-service-start-operation-from-timing-out/
+* https://sleeplessbeastie.eu/2020/02/29/how-to-prevent-systemd-service-start-operation-from-timing-out/
+* https://unix.stackexchange.com/questions/227017/how-to-change-systemd-service-timeout-value
+* https://newbedev.com/how-to-change-systemd-service-timeout-value
