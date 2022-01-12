@@ -199,3 +199,7 @@ EOF
 Resources:
 * IPTables Essentials: Common Firewall Rules and COmmands https://www.digitalocean.com/community/tutorials/iptables-essentials-common-firewall-rules-and-commands
 * List and Delete iptable rules: https://www.digitalocean.com/community/tutorials/how-to-list-and-delete-iptables-firewall-rules
+* https://piprojects.us/iptables-firewall-rules-for-your-pi/
+* https://discourse.osmc.tv/t/saving-iptables-firewall-rules-permanently/7286/7
+* http://smartathome.blogspot.com/2018/02/an-example-iptables-rules-file-for-your.html
+* https://mlagerberg.gitbooks.io/raspberry-pi/content/2.1-iptables.html
