@@ -7,7 +7,9 @@ LOG=/var/log/rkhunter.log
 cat <<EOF
 
 WHITELISTING Filess/Directories/Scripts - some examples
-After Rootkit Hunter has run you may encounter items in the log file you would like to whitelist. First verify that the entries are safe to add. The results of running these commands can be added to your 'rkhunter.conf.local' configuration file. Please adjust the commands, and the location of your 'rkhunter.log' log file, and verify the results before adding them. Do not automate adding whitelist entries to your configuration file.
+After Rootkit Hunter has run you may encounter items in the log file you would like to whitelist. First verify that the entries are safe to add.
+The results of running these commands can be added to your 'rkhunter.conf.local' configuration file. Please adjust the commands, and the location 
+of your 'rkhunter.log' log file, and verify the results before adding them. Do not automate adding whitelist entries to your configuration file.
 
 EOF
 
