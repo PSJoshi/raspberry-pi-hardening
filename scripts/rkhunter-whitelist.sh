@@ -35,3 +35,5 @@ echo '
      Allow hidden files ("filesystem" test):'
      awk '/Warning: Hidden file/ {print "ALLOWHIDDENFILE="$6}' $LOG |
       sed -e "s|:$||g"
+
+# Ref - https://raw.githubusercontent.com/MediaCluster/SysAdminScripts/master/rkhunter-whitelist.sh
