@@ -2,6 +2,20 @@
 # Kindly make sure that EPEL repo is enabled in yum configuration.
 yum install rkhunter
 
+# Modify rkhunter configuration
+
+# UPDATE_MIRRORS=1
+sed -i -e 's/^#UPDATE_MIRROR=0/UPDATE_MIRROR=1/g' /etc/rkhunter.conf
+# MIRRORS_MODE=0
+sed -i -e 's/^#MIRRORS_MODE=0/MIRRORS_MODE=0/g' /etc/rkhunter.conf
+
+MAIL-ON-WARNING=root@localhost
+# sed -i -e 's/^MAIL-ON-WARNING\=.*/MAIL-ON-WARNING=root@localhost/g' /etc/rkhunter.conf
+sed -i -e 's/^(\#?)(MAIL-ON-WARNING)(\=.*)/MAIL-ON-WARNING=root@localhost/g' /etc/rkhunter.conf
+
+MAIL_CMD=mail -s "[rkhunter] Warnings found for ${HOST_NAME}"
+sed -i -e 's/.*MAIL-CMD.*/MAIL_CMD=mail -s "[rkhunter] Warnings found for ${HOST_NAME}"/g' /etc/rkhunter.conf
+
 #updates rkhunter text data files
 rkhunter --update
 
