@@ -1,4 +1,8 @@
 #!/bin/bash
+# How to use -
+```
+# add-ssh-user joshi
+```
 
 USER_NAME=$1
 
