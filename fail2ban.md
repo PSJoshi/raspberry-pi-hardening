@@ -46,7 +46,7 @@ Now restart the fail2ban daemon and check its status
 # systemctl restart fail2ban
 # systemctl status fail2ban
 ```
-```
+
 If you want to look at your Fail2ban rules, use the iptables’ –line-numbers option.
 ```
 # iptables -L f2b-sshd -v -n --line-numbers
