@@ -113,4 +113,4 @@ fi
 #### References:
 * https://linuxhandbook.com/fail2ban-basic/
 * https://www.plesk.com/blog/various/using-fail2ban-to-secure-your-server/
-* * https://blog.zimbra.com/2022/08/configuring-fail2ban-on-zimbra/
+* https://blog.zimbra.com/2022/08/configuring-fail2ban-on-zimbra/
