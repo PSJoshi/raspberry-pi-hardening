@@ -51,7 +51,65 @@ If you want to look at your Fail2ban rules, use the iptables’ –line-numbers 
 ```
 # iptables -L f2b-sshd -v -n --line-numbers
 ```
+To check that the Fail2Ban is operating and the SSHd jail has been enabled, use the following command:
+```
+# fail2ban-client status
+# fail2ban-client status sshd
+```
+### Script to add/modify settings in ```jail.local``` file
+```
+#!/bin/bash
 
+result=$(cat /etc/fail2ban/jail.local |grep -i "^loglevel")
+if [[ ! -z $result ]]; then
+    sed -i -e "/^\[DEFAULT/{n;/^loglevel/s/=.*/=DEBUG/;}" /etc/fail2ban/jail.local
+else
+ sed -i -e "/^\[DEFAULT\]/a\loglevel=INFO" /etc/fail2ban/jail.local
+fi
+
+result=$(cat /etc/fail2ban/jail.local |grep -i "^logtarget")
+if [[ ! -z $result ]]; then
+    sed -i -e "/^\[DEFAULT/{n;/^logtarget/s/=.*/=STDERR/;}" /etc/fail2ban/jail.local
+else
+    sed -i -e "/^\[DEFAULT\]/a\logtarget=STDERR" /etc/fail2ban/jail.local
+fi
+
+result=$(cat /etc/fail2ban/jail.local |grep -i "^pidfile")
+if [[ ! -z $result ]]; then
+    sed -i -e "/^\[DEFAULT/{n;/^pidfile/s/=.*/=\/var\/run\/fail2ban\/fail2ban.pid/;}" /etc/fail2ban/jail.local
+else
+    sed -i -e "/^\[DEFAULT\]/a\pidfile=/var/run/fail2ban/fail2ban.pid" /etc/fail2ban/jail.local
+fi
+
+result=$(cat /etc/fail2ban/jail.local |grep -i "^socket")
+if [[ ! -z $result ]]; then
+    sed -i -e "/^\[DEFAULT/{n;/^socket/s/=.*/=\/var\/run\/fail2ban\/fail2ban.sock/;}" /etc/fail2ban/jail.local
+else
+    sed -i -e "/^\[DEFAULT\]/a\socket=/var/run/fail2ban/fail2ban.sock" /etc/fail2ban/jail.local
+fi
+
+result=$(cat /etc/fail2ban/jail.local |grep -i "^dbpurgeage")
+if [[ ! -z $result ]]; then
+    sed -i -e "/^\[DEFAULT/{n;/^dbpurgeage/s/=.*/=1d/;}" /etc/fail2ban/jail.local
+else
+    sed -i -e "/^\[DEFAULT\]/a\dbpurgeage=1d" /etc/fail2ban/jail.local
+fi
+
+result=$(cat /etc/fail2ban/jail.local |grep -i "^dbfile")
+if [[ ! -z $result ]]; then
+    sed -i -e "/^\[DEFAULT/{n;/^dbfile/s/=.*/=\/var\/lib\/fail2ban\/fail2ban.sqlite3/;}" /etc/fail2ban/jail.local
+else
+    sed -i -e "/^\[DEFAULT\]/a\dbfile=/var/lib/fail2ban/fail2ban.sqlite3" /etc/fail2ban/jail.local
+fi
+
+# for CentOS system, it may be changed to systemd instead of auto option.
+#result=$(cat /etc/fail2ban/jail.local |grep -i "^backend")
+#if [[ ! -z $result ]]; then
+#    sed -i -e "/^\[DEFAULT/{n;/^backend/s/=.*/=systemd/;}" /etc/fail2ban/jail.local
+#else
+#    sed -i -e "/^\[DEFAULT\]/a\backend=systemd" /etc/fail2ban/jail.local
+#fi
+```
 #### References:
 * https://linuxhandbook.com/fail2ban-basic/
 * https://www.plesk.com/blog/various/using-fail2ban-to-secure-your-server/
