@@ -110,6 +110,13 @@ fi
 #    sed -i -e "/^\[DEFAULT\]/a\backend=systemd" /etc/fail2ban/jail.local
 #fi
 ```
+#### Multiline sed search and replace
+```
+# sed -i -e "/^\[DEFAULT/{n;/^log_level/s/=INFO/=DEBUG/;}" junk/zzz.conf
+# cat /etc/fail2ban/jail.local |grep -i "^loglevel"
+# cat /etc/fail2ban/jail.local |grep -i "^dbpurgeage"
+```
+
 #### References:
 * https://linuxhandbook.com/fail2ban-basic/
 * https://www.plesk.com/blog/various/using-fail2ban-to-secure-your-server/
