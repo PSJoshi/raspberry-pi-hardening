@@ -33,4 +33,4 @@ If you wish to send the auditd logs over syslog, you need to do the following ch
 ### Interesting links
 * https://dev.to/ajaykdl/how-to-setup-auditd-on-ubuntu-jfk
 * https://goteleport.com/blog/linux-audit/
-* 
+* https://www.baeldung.com/linux/auditd-monitor-file-access
