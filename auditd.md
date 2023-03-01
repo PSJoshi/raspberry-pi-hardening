@@ -20,6 +20,10 @@ auditctl -D
 ```
 # auditctl -l
 ```
+### Reset lost record counter
+```
+# auditctl --reset-lost
+```
 If you wish to send the auditd logs over syslog, you need to do the following changes:
 
 * Edit /etc/audit/auditd.conf , and leave or change log_format to ‘RAW’
