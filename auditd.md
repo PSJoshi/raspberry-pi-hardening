@@ -29,3 +29,8 @@ If you wish to send the auditd logs over syslog, you need to do the following ch
 * Edit /etc/audit/auditd.conf , and leave or change log_format to ‘RAW’
 * Edit /etc/audit/auditd.conf and change write_logs to ‘no’
 * Edit /etc/audispd/plugins/syslog.conf and set ‘active = yes’
+
+### Interesting links
+* https://dev.to/ajaykdl/how-to-setup-auditd-on-ubuntu-jfk
+* https://goteleport.com/blog/linux-audit/
+* 
