@@ -10,4 +10,4 @@ sed -i -e '/Detail =/ s/= .*/= Med/' /usr/share/logwatch/default.conf/logwatch.c
 # logwatch --detail high --range yesterday --format html --filename meindateiname.html
 # logwatch --detail high --range 'between 14 days ago and yesterday' --format html --mailto xxxxxxx@xxxx.xxx
 
-By default, logwatch runs as a daily cron service under ```/etc/cron.daily/00logwatch``` and reports are generated on a daily basis.
+# By default, logwatch runs as a daily cron service under ```/etc/cron.daily/00logwatch``` and reports are generated on a daily basis.
