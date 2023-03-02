@@ -3,9 +3,11 @@
 ```
 $ sudo apt install iptables-persistent
 ```
+Note:
 * Deb distribution - ```iptables-persistent``` package
-* RPM distribution - ```iptables-services```
-* Make iptable rules persistent using ```iptables-save``` command even after reboot
+* RPM distribution - ```iptables-services``` package
+
+Make iptable rules persistent using ```iptables-save``` command even after reboot
 
 * Any current iptables rules will be saved to the corresponding IPv4 and IPv6 files below:
 ```
