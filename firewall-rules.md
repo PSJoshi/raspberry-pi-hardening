@@ -23,3 +23,11 @@ $ sudo iptables -L
 $ sudo iptables-save > /etc/iptables/rules.v4
 ```
 * To remove persistent iptables rules, open ```/etc/iptables/rules.v4``` file and delete lines containing all unwanted rules.
+* Enable daemon
+```
+psj@pi# systemctl enable netfilter-persistent.service
+```
+* At boot time, iptables-persistent simply calls
+```
+iptables-restore < /etc/iptables/rules.v4
+```
