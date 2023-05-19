@@ -3,7 +3,7 @@
 SUB="nologin"
 pass_expiry_days=1000
 
-for USER_Entry in $(grep home /etc/passwd | cut -d':' -f 1,7)
+for USER_Entry in $(cat /etc/passwd | cut -d':' -f 1,7)
 do
   if [[ "$USER_Entry" == *"$SUB"* ]]; then
     echo ""
