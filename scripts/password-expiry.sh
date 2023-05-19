@@ -10,8 +10,8 @@ do
   else
     name=$(echo $USER_Entry|cut -d ":" -f1)
     # echo $name
-    if [ "$(chage -l $name | grep 'Password expires' | cut -d':' -f2)" == ' never' ]; then
-    # echo $name
+    if [ "$(chage -l $name | grep 'Password expires' | cut -d':' -f2 | tr -d " ")" == 'never' ]; then
+    echo "Changing password expiry for $name"
     # change password expiry to approx. 
       chage -E $pass_expiry_days $name
     fi
