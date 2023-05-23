@@ -25,3 +25,5 @@ $ sudo ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
 $ sudo ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key
 $ sudo ssh-keygen -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key
 ```
+### Error could not write '0' to kernel_modules_disabled
+Please refer to excellent article on Linux audit blog - https://linux-audit.com/increase-kernel-integrity-with-disabled-linux-kernel-modules-loading/
