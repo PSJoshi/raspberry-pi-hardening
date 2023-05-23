@@ -58,4 +58,22 @@ And then we can query the journal for all messages logged by that user.
 ```
 # journalctl _UID=108
 ```
+### Deleting old logs
+If you use the --vacuum-size option, you can shrink your journal by indicating a size
+```
+#journalctl --vacuum-size=1G
+```
+You can also shrink the journal by providing a cutoff time with the --vacuum-time
+```
+# journalctl --vacuum-time=1years
+```
+### Common configuration options 
+You can configure the server to place limits on how much space the journal can take up by editing ```/etc/systemd/journald.conf``` file.
 
+Most common settings used to limit the journal growth are:
+* SystemMaxUse - specifies the maximum disk space that can be used by the journal in persistent storage.
+* SystemKeepFree - specifies the amount of space that the journal should leave free when adding journal entries to persistent storage.
+* systemMaxFileSize - controls how large individual journal files can grow to in persistent storage before being rotated.
+* runtimeMaxUse - specifies the maximum disk space that can be used in volatile storage (within the /run filesystem).
+* runtimeKeepFree - specifies the amount of space to be set aside for other uses when writing data to volatile storage (within the /run filesystem).
+* runtimeMaxFileSize - specifies the amount of space that an individual journal file can take up in volatile storage (within the /run filesystem) before being rotated.
