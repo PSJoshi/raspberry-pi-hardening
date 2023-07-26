@@ -4,6 +4,14 @@ rkhunter and its timer systemd services are given below:
 A nice detailed description of various rkhunter options is available here:
 https://x8t4.com/how-to-install-rkhunter-on-centos-7/
 
+How to do offline update of rkhunter database
+* https://neilzone.co.uk/2023/01/fixing-rkhunters-update-failed-error
+
+Other links related to rkhunter:
+* https://github.com/fstab50/RKinstaller/tree/master
+* https://docs.e2enetworks.com/security/bestpractice/rootkit_hunter.html
+* Sourceforge link - https://sourceforge.net/projects/rkhunter/files/
+* 
 ### rkhunter.service script
 ```
 # cat /etc/systemd/system/rkhunter.service
