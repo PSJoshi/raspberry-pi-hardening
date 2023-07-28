@@ -17,3 +17,14 @@ cat /etc/sudoers
 echo " Find all the programs that can be executed with root privileges"
 find / -perm -04000
 
+echo " Listing root users"
+getent group | grep 'x:0:' /etc/passwd | cut -d: -f1
+
+echo "Listing non-system users"
+eval getent passwd "{$(awk '/^UID_MIN/ {print $2}' /etc/login.defs)..$(awk '/^UID_MAX/ {print $2}' /etc/login.defs)}" | cut -d: -f1
+
+echo "Listing sudo users"
+getent group root wheel adm admin | cut -d: -f4
+
+echo "Listing users with shell"
+getent passwd | awk -F/ '$NF != "nologin" && $NF != "false" && $NF != "sync" && $NF != "!"' | cut -d: -f1
