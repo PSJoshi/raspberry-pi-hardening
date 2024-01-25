@@ -9,7 +9,7 @@
 # possible, but leave them commented.  Uncommented options override the
 # default value.
 #
-### Modern (OpenSSH 6.7+) -- source: <https://infosec.mozilla.org/guidelines/openssh.html>
+### Modern (OpenSSH 6.7+) -- source: <https://infosec.mozilla.org/guidelines/openssh.html> (July 4, 2019)
 # Supported HostKey algorithms by order of preference.
 HostKey /etc/ssh/ssh_host_ed25519_key
 HostKey /etc/ssh/ssh_host_rsa_key
@@ -26,7 +26,9 @@ MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@op
 PubkeyAuthentication yes
 
 # LogLevel VERBOSE logs user's key fingerprint on login. Needed to have a clear audit track of which key was using to log in.
+#Logging authentication and authorization related commands
 #SyslogFacility AUTH
+
 LogLevel VERBOSE
 
 # Log sftp level file access (read/write/etc.) that would not be easily logged otherwise.
@@ -40,7 +42,7 @@ Subsystem sftp  /usr/lib/openssh/sftp-server -f AUTHPRIV -l INFO
 # Using regular users in combination with /bin/su or /usr/bin/sudo ensure a clear audit track.
 PermitRootLogin No
 
-### Audit and Harden Your SSH Configuration --  source: <https://linux-audit.com/audit-and-harden-your-ssh-configuration/> 
+### Audit and Harden Your SSH Configuration --  source: <https://linux-audit.com/audit-and-harden-your-ssh-configuration/> (July 5, 2019 -pEEAT.)
 Port 22
 Protocol 2
 AddressFamily any
@@ -51,11 +53,16 @@ ListenAddress ::
 #RekeyLimit default none
 
 # Authentication:
-LoginGraceTime 2m
+#Authenticatin must happen within 30 seconds
+#LoginGraceTime 2m
+LoginGraceTime 30
+
 StrictModes yes
 MaxAuthTries 3
 MaxSessions 3
-AllowUsers user
+
+# allowed users
+#AllowUsers [username]
 
 # Expect .ssh/authorized_keys2 to be disregarded by default in future.
 #AuthorizedKeysFile     .ssh/authorized_keys .ssh/authorized_keys2
@@ -103,35 +110,66 @@ ChallengeResponseAuthentication no
 # and ChallengeResponseAuthentication to 'no'.
 UsePAM yes
 
+#Do not allow agent forwardng
 AllowAgentForwarding no
-#AllowTcpForwarding yes
-#GatewayPorts no
+
+#Disablow tunneling out via SSH
+AllowTcpForwarding no
+
+#Disablow tunneling out via SSH
+GatewayPorts no
+
+#Disablow tunneling out via SSH
+AllowStreamLocalForwarding no   
+
+#Disable X11 forwarding
 X11Forwarding no
+
 #X11DisplayOffset 10
 #X11UseLocalhost yes
 #PermitTTY yes
 PrintMotd yes
+
+#Show last login
 PrintLastLog yes
+
 #TCPKeepAlive yes
 #PermitUserEnvironment no
 #Compression delayed
+
 #ClientAliveInterval 0
+#Client timeout (15 minutes)
+ClientAliveInterval 900
+
 #ClientAliveCountMax 3
-UseDNS yes
+#This way enforces timeouts on the server side
+ClientAliveCountMax 0 
+
+#UseDNS yes
+#Client from a location without proper DNS generate a warning in the logs
+UseDNS no
+
 #PidFile /var/run/sshd.pid
 #MaxStartups 10:30:100
-#PermitTunnel no
+
+#Only SSH connection and nothing else
+PermitTunnel no
+
 #ChrootDirectory none
 #VersionAddendum none
 
 # no default banner path
-Banner /etc/ssh/sshd-banner
+# Banner /etc/ssh/sshd-banner
+#Show legal login banner
+Banner /etc/issue.net
 
 # Allow client to pass locale environment variables
 AcceptEnv LANG LC_*
 
 # override default of no subsystems
 #Subsystem      sftp    /usr/lib/openssh/sftp-server
+#Enable sFTP subsystem over SSH
+Subsystem sftp /usr/lib/ssh/sftp-server -f AUTHPRIV -l INFO    
 
 # Example of overriding settings on a per-user basis
 #Match User anoncvs
@@ -139,3 +177,5 @@ AcceptEnv LANG LC_*
 #       AllowTcpForwarding no
 #       PermitTTY no
 #       ForceCommand cvs server
+
+# Good reference - https://github.com/krabelize/sshd-hardening-ed25519/blob/master/sshd_config
